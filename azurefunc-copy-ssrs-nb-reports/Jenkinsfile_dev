@@ -35,7 +35,7 @@ node {
       }
       
 	  print "Installing Function!\n"
-	  
+	  PowerShell("az functionapp deployment source config-zip -g DEV-CareConnect -n SsrsNonBillableReportFTPTransferFunction-Java --src azurefunc-copy-ssrs-nb-reports.zip")
 	  print "End Function!\n"
 	  	  
 	  print "Logging out...\n"
