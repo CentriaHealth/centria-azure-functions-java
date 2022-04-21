@@ -18,7 +18,7 @@ node {
     stage('build') {
       print "Build starting!\n"
 	  sh 'cd azurefunc-copy-ssrs-nb-reports && mvn clean package'
-	  PowerShell("Compress-Archive -Path ./azurefunc-copy-ssrs-nb-reports/target/azure-functions/azurefunc-copy-ssrs-nb-reports/  -DestinationPath azurefunc-copy-ssrs-nb-reports.zip")
+	  PowerShell("Compress-Archive -Path ./azurefunc-copy-ssrs-nb-reports/target/azure-functions/azurefunc-copy-ssrs-nb-reports/  -DestinationPath ./azurefunc-copy-ssrs-nb-reports/target/azurefunc-copy-ssrs-nb-reports.zip")
       print "Build finished!\n"
     }
   
@@ -35,7 +35,7 @@ node {
       }
       
 	  print "Installing Function!\n"
-	  PowerShell("az functionapp deployment source config-zip -g $resourceGroup -n $functionName --src azurefunc-copy-ssrs-nb-reports.zip")
+	  PowerShell("az functionapp deployment source config-zip -g $resourceGroup -n $functionName --src ./azurefunc-copy-ssrs-nb-reports/target/azurefunc-copy-ssrs-nb-reports.zip")
 	  print "End Function!\n"
 	  	  
 	  print "Logging out...\n"
