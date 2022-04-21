@@ -18,6 +18,7 @@ node {
     stage('build') {
       print "Build starting!\n"
 	  sh 'cd azurefunc-copy-ssrs-nb-reports && mvn clean package && cd target/azure-functions && zip -r azurefunc-copy-ssrs-nb-reports.zip azurefunc-copy-ssrs-nb-reports/'
+	  PowerShell("Compress-Archive -Path .\azurefunc-copy-ssrs-nb-reports\target\azure-functions\azurefunc-copy-ssrs-nb-reports\  -DestinationPath azurefunc-copy-ssrs-nb-reports.zip")
       print "Build finished!\n"
     }
   
