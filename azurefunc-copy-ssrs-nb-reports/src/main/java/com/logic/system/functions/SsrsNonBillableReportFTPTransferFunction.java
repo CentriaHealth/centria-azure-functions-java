@@ -54,7 +54,7 @@ public class SsrsNonBillableReportFTPTransferFunction {
     //Make sure you have running Azurite for local testing azurite --silent --location c:\azurite --debug c:\azurite\debug.log
     @FunctionName("SsrsNonBillableReportFTPTransferFunction-Java")
     public void run(
-        @TimerTrigger(name = "timerInfo", schedule = "*/1 * * * *") String timerInfo,
+        @TimerTrigger(name = "timerInfo", schedule = "0 */5 * * * *") String timerInfo,
         final ExecutionContext context
     ) {
         context.getLogger().info("Java Timer trigger function executed started at: " + LocalDateTime.now());
