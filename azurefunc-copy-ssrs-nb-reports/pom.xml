@@ -14,7 +14,7 @@
         <java.version>1.8</java.version>
         <azure.functions.maven.plugin.version>1.9.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>1.4.0</azure.functions.java.library.version>
-        <functionAppName>azurefunc-copy-ssrs-nb-reports-1650393940018</functionAppName>
+        <functionAppName>azurefunc-copy-ssrs-nb-reports</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
     </properties>
 
@@ -170,6 +170,14 @@
                             <directory>obj</directory>
                         </fileset>
                     </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1.1</version>
+                <configuration>
+                    <packagingExcludes>%regex[Jenkinsfile.*]</packagingExcludes>
                 </configuration>
             </plugin>
         </plugins>
