@@ -17,10 +17,7 @@ node {
 	print "build!\n"
     stage('build') {
       print "Build starting!\n"
-	  sh 'cd azurefunc-copy-ssrs-nb-reports'
-      sh 'mvn clean package'
-	  sh 'cd target/azure-functions'
-	  sh 'zip -r azurefunc-copy-ssrs-nb-reports.zip azurefunc-copy-ssrs-nb-reports/'
+	  sh 'cd azurefunc-copy-ssrs-nb-reports && mvn clean package && cd target/azure-functions && zip -r azurefunc-copy-ssrs-nb-reports.zip azurefunc-copy-ssrs-nb-reports/'
       print "Build finished!\n"
     }
   
