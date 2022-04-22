@@ -18,14 +18,14 @@ node {
     stage('build') {
       print "Build starting!\n"
 	  sh 'cd azurefunc-copy-ssrs-nb-reports && mvn clean package'
-	  PowerShell("Compress-Archive -Path ./azurefunc-copy-ssrs-nb-reports/target/azure-functions/azurefunc-copy-ssrs-nb-reports/  -DestinationPath ./azurefunc-copy-ssrs-nb-reports/target/azurefunc-copy-ssrs-nb-reports.zip")
+	  PowerShell("Compress-Archive -Path ./azurefunc-copy-ssrs-nb-reports/target/azure-functions/azurefunc-copy-ssrs-nb-reports/*  -DestinationPath ./azurefunc-copy-ssrs-nb-reports/target/azurefunc-copy-ssrs-nb-reports.zip")
       print "Build finished!\n"
     }
   
     print "Deploy!\n"
     stage('deploy') {
       def resourceGroup = 'DEV-CareConnect'
-      def functionName = 'SsrsNonBillableReportFTPTransferFunction-Java'
+      def functionName = 'copy-ssrs-nb-reports'
       	  
       withCredentials([usernamePassword(credentialsId: 'azure_jenkins_qa', passwordVariable: 'AZURE_CLIENT_SECRET', usernameVariable: 'AZURE_CLIENT_ID')]) {
       print "Starting Login!\n"
