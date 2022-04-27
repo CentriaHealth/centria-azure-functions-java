@@ -1,33 +1,31 @@
 package com.logic.system.functions;
 
-import com.microsoft.azure.functions.ExecutionContext;
-import com.microsoft.azure.functions.HttpMethod;
-import com.microsoft.azure.functions.HttpRequestMessage;
-import com.microsoft.azure.functions.HttpResponseMessage;
-import com.microsoft.azure.functions.HttpStatus;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.logic.system.functions.cosmos.model.LogItem;
+import com.microsoft.azure.functions.*;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
+import com.microsoft.azure.functions.annotation.CosmosDBOutput;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.logging.Level;
 
 public class SaveWorkatoLogs {
-    /**
-     * This function listens at endpoint "/api/HttpExample". 1 way to invoke it using "curl" command in bash:
-     * 1. curl -d "HTTP Body" {your host}/api/HttpExample
-     */
     @FunctionName("Save-Workato-JSON-Logs")
     public HttpResponseMessage run(
-            @HttpTrigger(
-                name = "req",
-                methods = {HttpMethod.POST},
-                authLevel = AuthorizationLevel.ANONYMOUS,
-                route = "Save-Workato-JSON-Logs/saveLog")
-                HttpRequestMessage<Optional<String>> request,
+            @HttpTrigger(    name      = "req",
+                             methods   = {HttpMethod.POST},
+                             authLevel = AuthorizationLevel.FUNCTION,
+                             route     = "Save-Workato-JSON-Logs/saveLog")
+            HttpRequestMessage<Optional<String>> request,
+            @CosmosDBOutput( name                    = "%COSMOS_NAME%",
+                             databaseName            = "%COSMOS_DB_NAME%",
+                             collectionName          = "%COSMOS_COLLECTION_NAME%",
+                             connectionStringSetting = "%COSMOS_CONNECTION_STRING_SETTING%")
+            OutputBinding<LogItem> outputItem,
             final ExecutionContext context) {
 
         context.getLogger().info("Save-Workato-JSON-Logs/saveLog trigger processed a request.");
@@ -37,8 +35,12 @@ public class SaveWorkatoLogs {
 
         if (jsonString != null && headers.get("content-type").equals("application/json")) {
             try {
-                JSONParser parser = new JSONParser();
-                JSONObject json = (JSONObject) parser.parse(jsonString);
+                GsonBuilder builder = new GsonBuilder();
+                builder.setPrettyPrinting();
+                Gson gson = builder.create();
+                LogItem item = gson.fromJson(jsonString, LogItem.class);
+                item.setId(Math.abs(new Random().nextInt()));
+                outputItem.setValue(item);
                 return request.createResponseBuilder(HttpStatus.OK).body("JSON log object saved successfully").build();
             } catch (Exception e) {
                 context.getLogger().log(Level.SEVERE,"Save-Workato-JSON-Logs/saveLog had a problem getting the JSON Object. Message = "+e.getMessage(), e);
