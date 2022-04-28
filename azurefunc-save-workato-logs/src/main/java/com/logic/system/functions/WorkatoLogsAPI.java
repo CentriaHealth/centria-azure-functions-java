@@ -1,5 +1,4 @@
 package com.logic.system.functions;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.logic.system.functions.cosmos.model.LogItem;
@@ -13,21 +12,21 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.logging.Level;
 
-public class SaveWorkatoJSONLogs {
-    @FunctionName("Save-Workato-JSON-Logs")
+public class WorkatoLogsAPI {
+    @FunctionName("WorkatoJSONLogsPost")
     public HttpResponseMessage run(
             @HttpTrigger(    name      = "req",
-                    methods   = {HttpMethod.POST},
-                    authLevel = AuthorizationLevel.FUNCTION,
-                    route     = "Save-Workato-JSON-Logs/saveLog")
-                    HttpRequestMessage<Optional<String>> request,
+                             methods   = {HttpMethod.POST},
+                             authLevel = AuthorizationLevel.FUNCTION,
+                             route     = "WorkatoJSONLogsPost/saveLog")
+            HttpRequestMessage<Optional<String>> request,
             @CosmosDBOutput( name                    = "databaseForErrorLogs",
-                    databaseName            = "%COSMOS_ERROR_LOG_DB_NAME%",
-                    collectionName          = "%COSMOS_ERROR_LOG_COLLECTION_NAME%",
-                    connectionStringSetting          = "COSMOS_ERROR_LOG_CONNECTION_STRING_SETTING")
-                    OutputBinding<LogItem> outputItem,
+                             databaseName            = "%WORKATOJLOGPOST_COSMOS_ERROR_LOG_DB_NAME%",
+                             collectionName          = "%WORKATOJLOGPOST_COSMOS_ERROR_LOG_COLLECTION_NAME%",
+                    connectionStringSetting          = "WORKATOJLOGPOST_COSMOS_ERROR_LOG_CONNECTION_STRING_SETTING")
+            OutputBinding<LogItem> outputItem,
             final ExecutionContext context) {
-        context.getLogger().info("Save-Workato-JSON-Logs/saveLog trigger processed a request.");
+        context.getLogger().info("WorkatoJSONLogsPost/saveLog trigger processed a request.");
         Map<String, String> headers = request.getHeaders();
         final String jsonString = request.getBody().orElse(null);
         if (jsonString != null && headers.get("content-type").equals("application/json")) {
@@ -40,9 +39,10 @@ public class SaveWorkatoJSONLogs {
                 outputItem.setValue(item);
                 return request.createResponseBuilder(HttpStatus.OK).body("JSON log object saved successfully").build();
             } catch (Exception e) {
-                context.getLogger().log(Level.SEVERE,"Save-Workato-JSON-Logs/saveLog had a problem getting the JSON Object. Message = "+e.getMessage(), e);
+                context.getLogger().log(Level.SEVERE,"WorkatoJSONLogsPost/saveLog had a problem getting the JSON Object. Message = "+e.getMessage(), e);
             }
         }
         return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Please pass the json object in the body").build();
     }
+
 }
