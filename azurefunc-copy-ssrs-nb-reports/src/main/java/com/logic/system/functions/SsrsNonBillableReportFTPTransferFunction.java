@@ -53,8 +53,8 @@ public class SsrsNonBillableReportFTPTransferFunction {
     //For DEV check your local.settings.json and add this key value "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     //Make sure you have running Azurite for local testing azurite --silent --location c:\azurite --debug c:\azurite\debug.log
     @FunctionName("SsrsNonBillableReportFTPTransferFunction-Java")
-    public void run(
-        @TimerTrigger(name = "timerInfo", schedule = "0 */5 * * * *") String timerInfo,
+    public void run(                                 /*Every 5 minutes from 7AM to 9 PM*/
+        @TimerTrigger(name = "timerInfo", schedule = "0 */5 7-21 * * *") String timerInfo,
         final ExecutionContext context
     ) {
         context.getLogger().info("Java Timer trigger function executed started at: " + LocalDateTime.now());
