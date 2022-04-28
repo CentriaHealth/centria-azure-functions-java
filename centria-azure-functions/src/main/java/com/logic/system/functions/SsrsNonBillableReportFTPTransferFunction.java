@@ -16,10 +16,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Properties;
-import java.util.Random;
 import java.util.logging.Level;
 
 public class SsrsNonBillableReportFTPTransferFunction {
