@@ -6,7 +6,7 @@ import java.util.List;
 @Getter
 @Setter
 public class LogItem {
-    private int id;
+    private String id;
     private String type;
     private String datetime;
     private List<LogDetail> logDetails;

@@ -18,28 +18,25 @@ public class SaveWorkatoLogs {
     public HttpResponseMessage run(
             @HttpTrigger(    name      = "req",
                              methods   = {HttpMethod.POST},
-                             authLevel = AuthorizationLevel.FUNCTION,
+                             authLevel = AuthorizationLevel.ANONYMOUS,
                              route     = "Save-Workato-JSON-Logs/saveLog")
             HttpRequestMessage<Optional<String>> request,
-            @CosmosDBOutput( name                    = "%COSMOS_NAME%",
-                             databaseName            = "%COSMOS_DB_NAME%",
-                             collectionName          = "%COSMOS_COLLECTION_NAME%",
-                             connectionStringSetting = "%COSMOS_CONNECTION_STRING_SETTING%")
+            @CosmosDBOutput( name                    = "databaseForErrorLogs",
+                             databaseName            = "%COSMOS_ERROR_LOG_DB_NAME%",
+                             collectionName          = "%COSMOS_ERROR_LOG_COLLECTION_NAME%",
+                    connectionStringSetting          = "COSMOS_ERROR_LOG_CONNECTION_STRING_SETTING")
             OutputBinding<LogItem> outputItem,
             final ExecutionContext context) {
-
         context.getLogger().info("Save-Workato-JSON-Logs/saveLog trigger processed a request.");
         Map<String, String> headers = request.getHeaders();
-
         final String jsonString = request.getBody().orElse(null);
-
         if (jsonString != null && headers.get("content-type").equals("application/json")) {
             try {
                 GsonBuilder builder = new GsonBuilder();
                 builder.setPrettyPrinting();
                 Gson gson = builder.create();
                 LogItem item = gson.fromJson(jsonString, LogItem.class);
-                item.setId(Math.abs(new Random().nextInt()));
+                item.setId(new StringBuffer().append(Math.abs(new Random().nextInt())).toString());
                 outputItem.setValue(item);
                 return request.createResponseBuilder(HttpStatus.OK).body("JSON log object saved successfully").build();
             } catch (Exception e) {
