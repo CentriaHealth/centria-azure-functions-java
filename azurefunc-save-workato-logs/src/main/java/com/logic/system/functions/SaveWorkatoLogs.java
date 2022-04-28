@@ -18,7 +18,7 @@ public class SaveWorkatoLogs {
     public HttpResponseMessage run(
             @HttpTrigger(    name      = "req",
                              methods   = {HttpMethod.POST},
-                             authLevel = AuthorizationLevel.ANONYMOUS,
+                             authLevel = AuthorizationLevel.FUNCTION,
                              route     = "Save-Workato-JSON-Logs/saveLog")
             HttpRequestMessage<Optional<String>> request,
             @CosmosDBOutput( name                    = "databaseForErrorLogs",
