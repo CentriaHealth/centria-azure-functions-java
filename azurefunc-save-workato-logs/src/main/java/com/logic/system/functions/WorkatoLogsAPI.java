@@ -40,7 +40,7 @@ public class WorkatoLogsAPI {
                 item.setId(new StringBuffer().append(Math.abs(new Random().nextInt())).toString());
                 context.getLogger().info("ID = "+item.getId() +" create for new Log Item");
                 context.getLogger().info("Starting saving in Cosmos DB");
-                outputItem.setValue(item);
+                //outputItem.setValue(item);
                 context.getLogger().info("END saving in Cosmos DB");
                 return request.createResponseBuilder(HttpStatus.OK).body("JSON log object saved successfully").build();
             } catch (Exception e) {
