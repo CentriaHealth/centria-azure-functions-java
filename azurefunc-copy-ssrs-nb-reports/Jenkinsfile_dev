@@ -25,7 +25,7 @@ node {
     print "Deploy!\n"
     stage('deploy') {
       def resourceGroup = 'DEV-CareConnect'
-      def functionName = 'centria-app-functions'
+      def functionName = 'non-billable-reports-dev'
       	  
       withCredentials([usernamePassword(credentialsId: 'azure_jenkins_qa', passwordVariable: 'AZURE_CLIENT_SECRET', usernameVariable: 'AZURE_CLIENT_ID')]) {
       print "Starting Login!\n"
