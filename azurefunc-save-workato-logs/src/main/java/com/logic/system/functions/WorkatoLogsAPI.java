@@ -31,12 +31,17 @@ public class WorkatoLogsAPI {
         final String jsonString = request.getBody().orElse(null);
         if (jsonString != null && headers.get("content-type").equals("application/json")) {
             try {
+                context.getLogger().info("Starting WorkatoJSONLogsPost/saveLog converting into JSON LogItem class.");
                 GsonBuilder builder = new GsonBuilder();
                 builder.setPrettyPrinting();
                 Gson gson = builder.create();
                 LogItem item = gson.fromJson(jsonString, LogItem.class);
+                context.getLogger().info("End WorkatoJSONLogsPost/saveLog converting into JSON LogItem class.");
                 item.setId(new StringBuffer().append(Math.abs(new Random().nextInt())).toString());
+                context.getLogger().info("ID = "+item.getId() +" create for new Log Item");
+                context.getLogger().info("Starting saving in Cosmos DB");
                 outputItem.setValue(item);
+                context.getLogger().info("END saving in Cosmos DB");
                 return request.createResponseBuilder(HttpStatus.OK).body("JSON log object saved successfully").build();
             } catch (Exception e) {
                 context.getLogger().log(Level.SEVERE,"WorkatoJSONLogsPost/saveLog had a problem getting the JSON Object. Message = "+e.getMessage(), e);
