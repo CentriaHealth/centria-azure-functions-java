@@ -1,12 +1,10 @@
 package com.logic.system.functions;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.logic.system.functions.cosmos.model.LogItem;
 import com.microsoft.azure.functions.*;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.CosmosDBOutput;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
+import org.json.JSONObject;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
@@ -24,7 +22,7 @@ public class WorkatoLogsAPI {
                              databaseName            = "%WORKATOJLOGPOST_COSMOS_ERROR_LOG_DB_NAME%",
                              collectionName          = "%WORKATOJLOGPOST_COSMOS_ERROR_LOG_COLLECTION_NAME%",
                     connectionStringSetting          = "WORKATOJLOGPOST_COSMOS_ERROR_LOG_CONNECTION_STRING_SETTING")
-            OutputBinding<LogItem> outputItem,
+            OutputBinding<JSONObject> outputItem,
             final ExecutionContext context) {
         context.getLogger().info("WorkatoJSONLogsPost/saveLog trigger processed a request.");
         Map<String, String> headers = request.getHeaders();
@@ -32,15 +30,12 @@ public class WorkatoLogsAPI {
         if (jsonString != null && headers.get("content-type").equals("application/json")) {
             try {
                 context.getLogger().info("Starting WorkatoJSONLogsPost/saveLog converting into JSON LogItem class.");
-                GsonBuilder builder = new GsonBuilder();
-                builder.setPrettyPrinting();
-                Gson gson = builder.create();
-                LogItem item = gson.fromJson(jsonString, LogItem.class);
-                context.getLogger().info("End WorkatoJSONLogsPost/saveLog converting into JSON LogItem class.");
-                item.setId(new StringBuffer().append(Math.abs(new Random().nextInt())).toString());
-                context.getLogger().info("ID = "+item.getId() +" create for new Log Item");
+                JSONObject itemJson = new JSONObject(jsonString);
+                itemJson.put("id",new StringBuffer().append(Math.abs(new Random().nextInt())).toString());
+                context.getLogger().info("End WorkatoJSONLogsPost/saveLog converting into JSON class.");
+                context.getLogger().info("ID = "+itemJson.get("id") +" create for new JSON Item");
                 context.getLogger().info("Starting saving in Cosmos DB");
-                outputItem.setValue(item);
+                outputItem.setValue(itemJson);
                 context.getLogger().info("END saving in Cosmos DB");
                 return request.createResponseBuilder(HttpStatus.OK).body("JSON log object saved successfully").build();
             } catch (Exception e) {
