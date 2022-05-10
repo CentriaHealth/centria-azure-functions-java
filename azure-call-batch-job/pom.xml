@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.logic.system</groupId>
-    <artifactId>azurefunc-copy-ssrs-nb-reports</artifactId>
+    <groupId>com.logic.system.functions</groupId>
+    <artifactId>azure-call-batch-job</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -14,7 +14,7 @@
         <java.version>1.8</java.version>
         <azure.functions.maven.plugin.version>1.9.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>1.4.0</azure.functions.java.library.version>
-        <functionAppName>azurefunc-copy-ssrs-nb-reports</functionAppName>
+        <functionAppName>azure-call-batch-job</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
     </properties>
 
@@ -41,16 +41,17 @@
         </dependency>
 
         <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20220320</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-storage</artifactId>
             <version>8.6.6</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.jcraft</groupId>
-            <artifactId>jsch</artifactId>
-            <version>0.1.54</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -170,14 +171,6 @@
                             <directory>obj</directory>
                         </fileset>
                     </filesets>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.1.1</version>
-                <configuration>
-                    <packagingExcludes>%regex[Jenkinsfile.*]</packagingExcludes>
                 </configuration>
             </plugin>
         </plugins>

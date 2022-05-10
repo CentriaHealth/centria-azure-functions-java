@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.logic.system</groupId>
-    <artifactId>azurefunc-copy-ssrs-nb-reports</artifactId>
+    <artifactId>azurefunc-save-workato-logs</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -14,7 +14,7 @@
         <java.version>1.8</java.version>
         <azure.functions.maven.plugin.version>1.9.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>1.4.0</azure.functions.java.library.version>
-        <functionAppName>azurefunc-copy-ssrs-nb-reports</functionAppName>
+        <functionAppName>azurefunc-save-workato-logs</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
     </properties>
 
@@ -41,15 +41,22 @@
         </dependency>
 
         <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-storage</artifactId>
-            <version>8.6.6</version>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20220320</version>
         </dependency>
 
         <dependency>
-            <groupId>com.jcraft</groupId>
-            <artifactId>jsch</artifactId>
-            <version>0.1.54</version>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-cosmos</artifactId>
+            <version>4.11.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
