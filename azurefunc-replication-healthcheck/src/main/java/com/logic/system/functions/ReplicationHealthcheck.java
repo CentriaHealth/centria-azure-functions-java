@@ -17,7 +17,7 @@ public class ReplicationHealthcheck {
     /**
      * This function will be invoked periodically according to the specified schedule.
      */
-    @FunctionName("TimerTrigger-Java")
+    @FunctionName("ReplicationHealthcheck")
     public void run(
         @TimerTrigger(name = "timerInfo", schedule = "%REPLICATION_HC_CRON_EXP%") String timerInfo,
         final ExecutionContext context
