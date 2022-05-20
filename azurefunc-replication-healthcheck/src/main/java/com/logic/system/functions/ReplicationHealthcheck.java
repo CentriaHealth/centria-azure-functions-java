@@ -26,15 +26,12 @@ public class ReplicationHealthcheck {
     ) {
         context.getLogger().info("Java Timer trigger function executed at: " + LocalDateTime.now());
 
-
+        Connection conn = null;
         try {
             context.getLogger().info("Getting connection with "+REPLICATION_DB_CONNECTION_STRING);
-
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection con = DriverManager.getConnection("jdbc:sqlserver://10.140.0.11:1433;databaseName=centria_ams_replicated","ahernandez","W9P.igci$+");
-
+            conn = DriverManager.getConnection(REPLICATION_DB_CONNECTION_STRING);
             context.getLogger().info("Creating Statement.....");
-            Statement statement = con.createStatement();
+            Statement statement = conn.createStatement();
             context.getLogger().info("Executing Query.....");
             ResultSet rs = statement.executeQuery("select top 10 * from system_code ");
             while (rs.next()) {
@@ -42,7 +39,7 @@ public class ReplicationHealthcheck {
                 context.getLogger().info("Code Description: " + codeDesc);
             }
 
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             context.getLogger().info("Error while connection to DB: " + e.getMessage());
             context.getLogger().log(Level.SEVERE, "SQL Problem ...", e);
         }
