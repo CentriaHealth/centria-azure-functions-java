@@ -35,7 +35,7 @@ node {
       }
       
 	  print "Installing Function!\n"
-	  PowerShell("az functionapp deployment source config-zip -g $resourceGroup -n $functionName --src ./azurefunc-save-workato-logs/target/azurefunc-save-workato-logs.zip")
+	  PowerShell("az functionapp deployment source config-zip -g $resourceGroup -n $functionName --src ./azurefunc-replication-healthcheck/target/azurefunc-replication-healthcheck.zip")
 	  print "End Function!\n"
 	  	  
 	  print "Logging out...\n"
