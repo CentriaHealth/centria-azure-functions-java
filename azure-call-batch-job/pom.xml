@@ -130,8 +130,7 @@
                                 <resource>
                                     <directory>${project.basedir}</directory>
                                     <includes>
-                                        <include>host.json</include>
-                                        <include>local.settings.json</include>
+                                        <include>host.json</include>                                        
                                     </includes>
                                 </resource>
                             </resources>

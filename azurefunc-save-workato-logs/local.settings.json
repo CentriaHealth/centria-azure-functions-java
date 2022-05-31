@@ -1,0 +1,10 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "java",
+    "WORKATOJLOGPOST_COSMOS_ERROR_LOG_DB_NAME": "centria-dev",
+    "WORKATOJLOGPOST_COSMOS_ERROR_LOG_COLLECTION_NAME": "workflow-error",
+    "WORKATOJLOGPOST_COSMOS_ERROR_LOG_CONNECTION_STRING_SETTING": "AccountEndpoint=https://centria-dev.documents.azure.com/; AccountKey=0Sns0lytxmdQRWR4MFvR71pkBUM32FE9Jxlf9vRLEpa0thiqkqqzo7RTTbjLcCRwL2aETULuanalj8nUvrUAnw==;"
+  }
+}
