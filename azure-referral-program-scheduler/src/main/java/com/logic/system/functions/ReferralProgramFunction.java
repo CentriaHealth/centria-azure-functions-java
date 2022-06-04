@@ -46,7 +46,7 @@ public class ReferralProgramFunction {
         URL url = new URL(BATCH_URL_TO_CALL);
         String response = sendRequest(url, "POST", json.toString(),context);
         context.getLogger().info("Successfully finished the BatchCall");
-        context.getLogger().info("Sent following results: " + response.toString());
+        context.getLogger().info("Sent following results: " + response);
     }
 
     private String inputStreamToString(HttpURLConnection conn) throws IOException {
@@ -79,8 +79,9 @@ public class ReferralProgramFunction {
                 throw new RuntimeException(message);
             }
             context.getLogger().info("Request successful, returned 200 " + rawData);
-            context.getLogger().info(inputStreamToString(conn));
-            return inputStreamToString(conn);
+            String response = inputStreamToString(conn);
+            context.getLogger().info("Returned : "+response);
+            return response;
         } finally {
             if (conn != null)
                 conn.disconnect();
