@@ -28,15 +28,13 @@ public class ReferralProgramFunction {
      */
     @FunctionName("referralProgramScheduler-Java")
     public void run(@TimerTrigger(name = "timerInfo", schedule = "%REFERRAL_PROGRAM_CRON_EXP%") String timerInfo,
-        final ExecutionContext context
+        final ExecutionContext context) throws IOException {
 
-
-    ) throws IOException {
         context.getLogger().info("Starting service at " + this.getClass().getName());
         JSONObject json = new JSONObject();
         context.getLogger().info("Will call Scheduler to send Referral Programs to the Queu");
         json.put("programName", "Tech Referral Program");
-        String response = sendRequest(json.toString(),context);
+        String response = callReferralScheduleAPI(json.toString(),context);
         JSONArray inputArray = new JSONArray(response);
         Iterator it = inputArray.iterator();
         while(it.hasNext()){
@@ -48,19 +46,13 @@ public class ReferralProgramFunction {
         context.getLogger().info("Successfully finished the BatchCall");
     }
 
-    private String inputStreamToString(HttpURLConnection conn) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-        StringBuilder sb = new StringBuilder();
-        for (int c; (c = br.read()) >= 0;)
-            sb.append((char) c);
-        return sb.toString();
-    }
-    public String sendRequest(String rawData,ExecutionContext context) throws IOException {
+
+    private String callReferralScheduleAPI(String rawData,ExecutionContext context) throws IOException {
         //**Get the Token*/
         Map<String,String> headers = new HashMap<>();
         headers.put("Content-Type","application/x-www-form-urlencoded");
         headers.put("charset","utf-8");
-        String rawTokenResponse = executeRequest(new URL(SSO_BATCH_API_TOKEN),"POST",headers,"",context);
+        String rawTokenResponse = sendRequest(new URL(SSO_BATCH_API_TOKEN),"POST",headers,"",context);
         JSONObject jsonObject = new JSONObject(rawTokenResponse);
         String token = jsonObject.getString("access_token");
 
@@ -68,10 +60,10 @@ public class ReferralProgramFunction {
         headers.put("Authorization",token);
         headers.put("Accept","application/json");
         headers.put("Content-Type", "application/json");
-        return executeRequest(new URL(BATCH_REFERRAL_API_TO_CALL),"POST",headers,rawData,context);
+        return sendRequest(new URL(BATCH_REFERRAL_API_TO_CALL),"POST",headers,rawData,context);
     }
 
-    private String executeRequest(URL url,String method, Map<String,String> headers, String params, ExecutionContext context){
+    private String sendRequest(URL url,String method, Map<String,String> headers, String params, ExecutionContext context){
         String response = "";
         HttpURLConnection conn = null;
         try {
@@ -101,6 +93,14 @@ public class ReferralProgramFunction {
             context.getLogger().log(Level.SEVERE,e.getMessage(),e);
         }
         return response;
+    }
+
+    private String inputStreamToString(HttpURLConnection conn) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+        StringBuilder sb = new StringBuilder();
+        for (int c; (c = br.read()) >= 0;)
+            sb.append((char) c);
+        return sb.toString();
     }
 
 }
