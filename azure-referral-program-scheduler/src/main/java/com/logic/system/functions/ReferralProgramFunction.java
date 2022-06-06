@@ -2,13 +2,10 @@ package com.logic.system.functions;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.time.*;
 import java.util.*;
 import java.util.logging.Level;
-
 import com.microsoft.azure.functions.annotation.*;
 import com.microsoft.azure.functions.*;
 import org.json.JSONArray;
@@ -18,15 +15,12 @@ import org.json.JSONObject;
  * Azure Functions with Timer trigger.
  */
 public class ReferralProgramFunction {
-
-    private static final String SSO_BASE_URL;
-    private static final String SSO_BATCH_URL;
-    private static final String BATCH_URL_TO_CALL;
+    private static final String SSO_BATCH_API_TOKEN;
+    private static final String BATCH_REFERRAL_API_TO_CALL;
 
     static {
-        SSO_BASE_URL = System.getenv("SSO_BASE_URL");
-        SSO_BATCH_URL = System.getenv("SSO_BATCH_URL");
-        BATCH_URL_TO_CALL = System.getenv("BATCH_URL_TO_CALL");
+        SSO_BATCH_API_TOKEN = System.getenv("SSO_BATCH_API_TOKEN");
+        BATCH_REFERRAL_API_TO_CALL = System.getenv("BATCH_REFERRAL_API_TO_CALL");
     }
 
     /**
@@ -66,7 +60,7 @@ public class ReferralProgramFunction {
         Map<String,String> headers = new HashMap<>();
         headers.put("Content-Type","application/x-www-form-urlencoded");
         headers.put("charset","utf-8");
-        String rawTokenResponse = executeRequest(new URL(SSO_BASE_URL+ SSO_BATCH_URL),"POST",headers,"",context);
+        String rawTokenResponse = executeRequest(new URL(SSO_BATCH_API_TOKEN),"POST",headers,"",context);
         JSONObject jsonObject = new JSONObject(rawTokenResponse);
         String token = jsonObject.getString("access_token");
 
@@ -74,7 +68,7 @@ public class ReferralProgramFunction {
         headers.put("Authorization",token);
         headers.put("Accept","application/json");
         headers.put("Content-Type", "application/json");
-        return executeRequest(new URL(BATCH_URL_TO_CALL),"POST",headers,rawData,context);
+        return executeRequest(new URL(BATCH_REFERRAL_API_TO_CALL),"POST",headers,rawData,context);
     }
 
     private String executeRequest(URL url,String method, Map<String,String> headers, String params, ExecutionContext context){
