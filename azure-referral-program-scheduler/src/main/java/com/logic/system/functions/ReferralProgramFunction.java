@@ -8,11 +8,13 @@ import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 
 import com.microsoft.azure.functions.annotation.*;
 import com.microsoft.azure.functions.*;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -45,8 +47,15 @@ public class ReferralProgramFunction {
         json.put("programName", "Tech Referral Program");
         URL url = new URL(BATCH_URL_TO_CALL);
         String response = sendRequest(url, "POST", json.toString(),context);
+        JSONArray inputArray = new JSONArray(response);
+        Iterator it = inputArray.iterator();
+        while(it.hasNext()){
+            Object e = it.next();
+            if(e instanceof JSONObject){
+                context.getLogger().info(((JSONObject)e).toString());
+            }
+        }
         context.getLogger().info("Successfully finished the BatchCall");
-        context.getLogger().info("Sent following results: " + response);
     }
 
     private String inputStreamToString(HttpURLConnection conn) throws IOException {
