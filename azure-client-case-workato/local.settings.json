@@ -1,0 +1,13 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "java",
+    "INBOUND_FOLDER_REPORT" : "Funtion-Inbound-ABA-SSRS-Reports",
+    "FILE_SHARE_REPORTS" : "aba-ssrs-reports",
+    "ACCOUNT_NAME" : "devcareconnectaa4a",
+    "ACCOUNT_KEY" : "Vla3N1UHa2mDYIHq9wRKRier23CSJ4QsRvRulr9dAZArgqQO2hEVjBFR23mQyEcaw307CjmcxDpmDdhGCs5OGA==",
+    "CASE_FILE_NAME" : "client_case.csv",
+    "KEY_VAULT_NAME" : "centria-sso-dev-keyvault"
+  }
+}
