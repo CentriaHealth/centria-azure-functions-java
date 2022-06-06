@@ -6,10 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 
 import com.microsoft.azure.functions.annotation.*;
@@ -45,8 +42,7 @@ public class ReferralProgramFunction {
         JSONObject json = new JSONObject();
         context.getLogger().info("Will call Scheduler to send Referral Programs to the Queu");
         json.put("programName", "Tech Referral Program");
-        URL url = new URL(BATCH_URL_TO_CALL);
-        String response = sendRequest(url, "POST", json.toString(),context);
+        String response = sendRequest(json.toString(),context);
         JSONArray inputArray = new JSONArray(response);
         Iterator it = inputArray.iterator();
         while(it.hasNext()){
@@ -65,52 +61,37 @@ public class ReferralProgramFunction {
             sb.append((char) c);
         return sb.toString();
     }
-    public String sendRequest(URL url, String method, String rawData,ExecutionContext context) throws IOException {
-        String token = getToken(context);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        try {
-            conn.setRequestMethod(method);
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            conn.setRequestProperty("Accept", "application/json");
-            conn.setRequestProperty("Authorization", token);
-            conn.setRequestProperty("Content-Type", "application/json");
-            if (method.equals("POST") && rawData!=null && rawData.length()>0) {
-                try (OutputStream wr = conn.getOutputStream()) {
-                    byte[] postData = rawData.getBytes(StandardCharsets.UTF_8);
-                    wr.write(postData, 0, postData.length);
-                }
-            }
+    public String sendRequest(String rawData,ExecutionContext context) throws IOException {
+        //**Get the Token*/
+        Map<String,String> headers = new HashMap<>();
+        headers.put("Content-Type","application/x-www-form-urlencoded");
+        headers.put("charset","utf-8");
+        String rawTokenResponse = executeRequest(new URL(SSO_BASE_URL+ SSO_BATCH_URL),"POST",headers,"",context);
+        JSONObject jsonObject = new JSONObject(rawTokenResponse);
+        String token = jsonObject.getString("access_token");
 
-            if (conn.getResponseCode() != 200) {
-                String message = "Failed : HTTP error code : " + conn.getResponseCode() + " " + conn.getResponseMessage()
-                        + " url: " + url.getPath();
-                throw new RuntimeException(message);
-            }
-            context.getLogger().info("Request successful, returned 200 " + rawData);
-            String response = inputStreamToString(conn);
-            context.getLogger().info("Returned : "+response);
-            return response;
-        } finally {
-            if (conn != null)
-                conn.disconnect();
-        }
+        /**Execute the scheduler*/
+        headers.put("Authorization",token);
+        headers.put("Accept","application/json");
+        headers.put("Content-Type", "application/json");
+        return executeRequest(new URL(BATCH_URL_TO_CALL),"POST",headers,rawData,context);
     }
 
-    private String getToken(ExecutionContext context){
-        String token = "";
+    private String executeRequest(URL url,String method, Map<String,String> headers, String params, ExecutionContext context){
+        String response = "";
         HttpURLConnection conn = null;
-        String params = null;
         try {
-            URL url = new URL(SSO_BASE_URL+ SSO_BATCH_URL);
             conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            params = "";
+            conn.setRequestMethod(method);
             conn.setDoOutput(true);
             conn.setInstanceFollowRedirects(false);
             conn.setUseCaches(false);
-            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            conn.setRequestProperty("charset", "utf-8");
+
+            if(headers!=null){
+                Set<String> keys = headers.keySet();
+                for(String k : keys)
+                    conn.setRequestProperty(k,headers.get(k));
+            }
             conn.setRequestProperty("Content-Length", Integer.toString(params.length()));
             DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
             byte[] postData = params.getBytes(StandardCharsets.UTF_8);
@@ -119,15 +100,13 @@ public class ReferralProgramFunction {
                 conn = null;
                 throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
             }
-            String response = inputStreamToString(conn);
-            JSONObject jsonObject = new JSONObject(response);
-            token = jsonObject.getString("access_token");
-            context.getLogger().info("Token retrieved successfully... "+token);
+            response = inputStreamToString(conn);
+            context.getLogger().info("Response retrieved successfully... "+response);
         } catch (Exception e) {
             context.getLogger().info("there was an error while getting the Token " + e.getMessage());
             context.getLogger().log(Level.SEVERE,e.getMessage(),e);
         }
-
-        return token;
+        return response;
     }
+
 }
