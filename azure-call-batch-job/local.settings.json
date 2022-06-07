@@ -1,9 +1,0 @@
-{
-  "IsEncrypted": false,
-  "Values": {
-    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "FUNCTIONS_WORKER_RUNTIME": "java",
-    "SSO_BASE_URL" : "https://centria-sso-dev.azurewebsites.net",
-    "SSO_BATCH_URL": "/oauth2/v1/m2mTokenForApp?appName=portal"
-  }
-}

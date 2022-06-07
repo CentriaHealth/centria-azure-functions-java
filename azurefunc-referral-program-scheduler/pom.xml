@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.logic.system.functions</groupId>
-    <artifactId>azure-referral-program</artifactId>
+    <artifactId>azurefunc-referral-program</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -14,7 +14,7 @@
         <java.version>1.8</java.version>
         <azure.functions.maven.plugin.version>1.9.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>1.4.0</azure.functions.java.library.version>
-        <functionAppName>azure-referral-program-scheduler</functionAppName>
+        <functionAppName>azurefunc-referral-program-scheduler</functionAppName>
         <stagingDirectory>${project.build.directory}/azure-functions/${functionAppName}</stagingDirectory>
     </properties>
 
@@ -164,6 +164,14 @@
                             <directory>obj</directory>
                         </fileset>
                     </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1.1</version>
+                <configuration>
+                    <packagingExcludes>%regex[Jenkinsfile.*]</packagingExcludes>
                 </configuration>
             </plugin>
         </plugins>

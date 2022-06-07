@@ -18,7 +18,7 @@ node {
     stage('build') {
       print "Build starting!\n"
 	  sh 'cd azure-referral-program-scheduler && mvn clean package'
-	  PowerShell("Compress-Archive -Path ./azure-referral-program-scheduler/target/azure-functions/azure-referral-program-scheduler/*  -DestinationPath ./azure-referral-program-scheduler/target/azure-referral-program-scheduler.zip")
+	  PowerShell("Compress-Archive -Path ./azurefunc-referral-program-scheduler/target/azure-functions/azurefunc-referral-program-scheduler/*  -DestinationPath ./azurefunc-referral-program-scheduler/target/azurefunc-referral-program-scheduler.zip")
       print "Build finished!\n"
     }
   
@@ -35,7 +35,7 @@ node {
       }
       
 	  print "Installing Function!\n"
-	  PowerShell("az functionapp deployment source config-zip -g $resourceGroup -n $functionName --src ./azure-referral-program-scheduler/target/azure-referral-program-scheduler.zip")
+	  PowerShell("az functionapp deployment source config-zip -g $resourceGroup -n $functionName --src ./azurefunc-referral-program-scheduler/target/azurefunc-referral-program-scheduler.zip")
 	  print "End Function!\n"
 	  	  
 	  print "Logging out...\n"
