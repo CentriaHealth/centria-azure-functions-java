@@ -17,7 +17,7 @@ node {
 	print "build!\n"
     stage('build') {
       print "Build starting!\n"
-	  sh 'cd azure-client-case-workato && mvn clean package'
+	  sh 'cd azurefunc-client-case-workato && mvn clean package'
 	  PowerShell("Compress-Archive -Path ./azurefunc-client-case-workato/target/azure-functions/azurefunc-client-case-workato/*  -DestinationPath ./azurefunc-client-case-workato/target/azurefunc-client-case-workato.zip")
       print "Build finished!\n"
     }
