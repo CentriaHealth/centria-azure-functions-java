@@ -1,0 +1,14 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "java",
+    "INBOUND_FOLDER_REPORT" : "Funtion-Inbound-ABA-SSRS-Reports",
+    "FILE_SHARE_REPORTS" : "aba-ssrs-reports",
+    "STORAGE_CONNECTION_STRING" : "DefaultEndpointsProtocol=https;AccountName=devcareconnectaa4a;AccountKey=Vla3N1UHa2mDYIHq9wRKRier23CSJ4QsRvRulr9dAZArgqQO2hEVjBFR23mQyEcaw307CjmcxDpmDdhGCs5OGA==;EndpointSuffix=core.windows.net",
+    "CASE_FILE_NAME" : "client_case.csv",
+    "ASBSSKEDULO_CONNECTION_STRING" : "Endpoint=sb://careconnect-dev.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=6UAghe+cfPtx0A8QRzB8Yl3dSwLUPop4UatlahRobR0=",
+    "SKEDULO_QUEUE_NAME" : "skedulo",
+    "CLIENT_CASE_CRON_EXP" : "0 */10 * * * *"
+  }
+}
