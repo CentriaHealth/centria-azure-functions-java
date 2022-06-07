@@ -17,7 +17,7 @@ node {
 	print "build!\n"
     stage('build') {
       print "Build starting!\n"
-	  sh 'cd azure-referral-program-scheduler && mvn clean package'
+	  sh 'cd azurefunc-referral-program-scheduler && mvn clean package'
 	  PowerShell("Compress-Archive -Path ./azurefunc-referral-program-scheduler/target/azure-functions/azurefunc-referral-program-scheduler/*  -DestinationPath ./azurefunc-referral-program-scheduler/target/azurefunc-referral-program-scheduler.zip")
       print "Build finished!\n"
     }
