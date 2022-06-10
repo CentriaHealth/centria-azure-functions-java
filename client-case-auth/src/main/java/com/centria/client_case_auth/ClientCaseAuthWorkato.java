@@ -82,7 +82,7 @@ public class ClientCaseAuthWorkato {
                     caseDetailJson.put("payerId", auth.get(4));
                     caseDetailJson.put("typeCode", auth.get(5));
                 }catch (Exception e){
-                    e.printStackTrace();
+                    context.getLogger().info("Exception occurred, "+e.getMessage());
                 }
                 caseJson.put("caseDetails",caseDetailJson);
                 list.add(caseJson.toString());
