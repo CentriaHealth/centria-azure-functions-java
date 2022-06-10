@@ -18,7 +18,7 @@ node {
     stage('build') {
       print "Build starting!\n"
 	  sh 'cd azure-client-case-workato && mvn clean package'
-	  PowerShell("Compress-Archive -Path ./client-case-auth/target/azure-functions/client-case-auth/*  -DestinationPath ./client-case-auth/target/client-case-auth.zip")
+	  PowerShell("Compress-Archive -Path ./azurefunc-client-case-auth-workato/target/azure-functions/azurefunc-client-case-auth-workato/*  -DestinationPath ./azurefunc-client-case-auth-workato/target/azurefunc-client-case-auth-workato.zip")
       print "Build finished!\n"
     }
 
@@ -35,7 +35,7 @@ node {
       }
       
 	  print "Installing Function!\n"
-	  PowerShell("az functionapp deployment source config-zip -g $resourceGroup -n $functionName --src ./client-case-auth/target/client-case-auth.zip")
+	  PowerShell("az functionapp deployment source config-zip -g $resourceGroup -n $functionName --src ./azurefunc-client-case-auth-workato/target/azurefunc-client-case-auth-workato.zip")
 	  print "End Function!\n"
 	  	  
 	  print "Logging out...\n"
