@@ -1,0 +1,46 @@
+import groovy.json.JsonSlurper
+
+def PowerShell(psCmd) {
+    psCmd=psCmd.replaceAll("%", "%%")
+    bat "powershell.exe -NonInteractive -ExecutionPolicy Bypass -Command \"\$ErrorActionPreference='Stop';[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;$psCmd;EXIT \$global:LastExitCode\""
+}
+
+node {
+  withEnv(['AZURE_SUBSCRIPTION_ID=495d3bb4-96c8-4b04-ac21-78a55b4a55e5',
+        'AZURE_TENANT_ID=1cde4cd1-e5ba-4934-9c27-8751ec550d76']) {
+    
+	print "Init!\n"
+	stage('init') {
+      checkout scm
+    }
+    
+	print "build!\n"
+    stage('build') {
+      print "Build starting!\n"
+	  sh 'cd azurefunc-referral-program-scheduler && mvn clean package'
+	  PowerShell("Compress-Archive -Path ./azurefunc-referral-program-scheduler/target/azure-functions/azurefunc-referral-program-scheduler/*  -DestinationPath ./azurefunc-referral-program-scheduler/target/azurefunc-referral-program-scheduler.zip")
+      print "Build finished!\n"
+    }
+  
+    print "Deploy!\n"
+    stage('deploy') {
+      def resourceGroup = 'DEV-CareConnect'
+      def functionName = 'referral-program-scheduler-dev'
+      	  
+      withCredentials([usernamePassword(credentialsId: 'azure_jenkins_qa', passwordVariable: 'AZURE_CLIENT_SECRET', usernameVariable: 'AZURE_CLIENT_ID')]) {
+      print "Starting Login!\n"
+      PowerShell("az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID")
+      PowerShell("az account set -s $AZURE_SUBSCRIPTION_ID")
+      print "Logged In!\n"
+      }
+      
+	  print "Installing Function!\n"
+	  PowerShell("az functionapp deployment source config-zip -g $resourceGroup -n $functionName --src ./azurefunc-referral-program-scheduler/target/azurefunc-referral-program-scheduler.zip")
+	  print "End Function!\n"
+	  	  
+	  print "Logging out...\n"
+      PowerShell("az logout")
+	  print "Logging out finished!\n"
+    }
+  }
+}

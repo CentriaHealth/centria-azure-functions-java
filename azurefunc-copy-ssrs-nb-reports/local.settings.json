@@ -1,0 +1,18 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "java",
+    "SSRSNONBREPORT_INBOUND_FOLDER_SSRS_REPORT" : "Funtion-Inbound-ABA-SSRS-Reports",
+    "SSRSNONBREPORT_ARCHIVED_FOLDER_SSRS_REPORT" : "Funtion-Archived-ABA-SSRS-Reports",
+    "SSRSNONBREPORT_FILE_SHARE_SSRS_REPORTS" : "aba-ssrs-reports",
+    "SSRSNONBREPORT_ACCOUNT_NAME" : "prdcentriashared",
+    "SSRSNONBREPORT_ACCOUNT_KEY" : "2Qw51jYpxomJf3wU9WyJSXcTOaohrXZU09OM0FyNqQwZ/X/NiMSx2018y8wDcS1wqxLJcem0QIyvCF8JWevbfg==",
+    "SSRSNONBREPORT_SFTP_HOST" : "sftp.centriahealthcare.com",
+    "SSRSNONBREPORT_SFTP_PORT" : "22",
+    "SSRSNONBREPORT_SFTP_USERNAME" : "greenhouse-uat",
+    "SSRSNONBREPORT_SFTP_PASSWORD" : "1SN6DZ6x",
+    "SSRSNONBREPORT_SFTP_DESTINY_FOLDER" : "//DEV/SSRS_NON_BILLABLE_REPORTS/",
+    "SSRSNONBREPORT_CRON_EXP" : "0 */5 7-21 * * *"
+  }
+}
