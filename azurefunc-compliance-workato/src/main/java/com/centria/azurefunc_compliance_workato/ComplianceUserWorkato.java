@@ -65,6 +65,7 @@ public class ComplianceUserWorkato {
                 userJson.put("subtype","compliance");
                 JSONObject complianceDetailsJson = new JSONObject();
                 complianceDetailsJson.put("userId",userId);
+                complianceDetailsJson.put("syncskedulo",true);
                 JSONObject mvr = new JSONObject();
                 mvr.put("name","MVR");
                 JSONObject driver = new JSONObject();
