@@ -61,7 +61,7 @@ public class ComplianceUserWorkato {
         if(userIdList!=null && !userIdList.isEmpty())
             userIdList.forEach(userId->{
                 JSONObject userJson = new JSONObject();
-                userJson.put("type","case");
+                userJson.put("type","user");
                 userJson.put("subtype","compliance");
                 JSONObject complianceDetailsJson = new JSONObject();
                 complianceDetailsJson.put("userId",userId);
