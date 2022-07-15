@@ -74,17 +74,17 @@ public class ClientCaseAuthWorkato {
                     DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
                     LocalDateTime  localDateTime=LocalDateTime.parse(auth.get(1),format);
                     Timestamp timestamp = Timestamp.valueOf(localDateTime);
-                    caseDetailJson.put("authEndDate",timestamp.getTime() );
+                    caseDetailJson.put("authEndDate",timestamp.toString() );
                     caseDetailJson.put("authNumber", auth.get(2));
                     localDateTime=LocalDateTime.parse(auth.get(1),format);
                     timestamp = Timestamp.valueOf(localDateTime);
-                    caseDetailJson.put("authStartDate",  timestamp.getTime());
+                    caseDetailJson.put("authStartDate",  timestamp.toString());
                     caseDetailJson.put("payerId", auth.get(4));
                     caseDetailJson.put("typeCode", auth.get(5));
                 }catch (Exception e){
                     context.getLogger().info("Exception occurred, "+e.getMessage());
                 }
-                caseJson.put("caseDetails",caseDetailJson);
+                caseJson.put("authDetails",caseDetailJson);
                 list.add(caseJson.toString());
             });
         return list;
